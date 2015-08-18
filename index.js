@@ -45,6 +45,10 @@ SASSPlugin.prototype.toTree = function(tree, inputPath, outputPath, inputOptions
      */
     var treeString = tree.read ? tree.read() : tree;
 
+    if (typeof treeString !== 'string') {
+      treeString = '.';
+    }
+
     // When ember-cli preprocess addon style the inputPath is '/',
     // add the '/addon/styles' to try found addon sass files
     var root = (inputPath === '/') ? treeString : '.';
@@ -54,7 +58,7 @@ SASSPlugin.prototype.toTree = function(tree, inputPath, outputPath, inputOptions
 
     // Convert the (possibly) absolute path to a relative path expected by
     // `broccoli-sass-source-maps`
-    return filePath.replace(treeString + '/', '');
+    return path.relative(treeString, filePath);
   }
 
   return mergeTrees(trees);
